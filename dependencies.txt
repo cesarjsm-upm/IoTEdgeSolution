@@ -1,6 +1,6 @@
-docker==5.0.3
-docker-compose==1.29.1
-urllib3==1.26.0
-python-dotenv==0.19.0
+docker==5.0.3 
+requests>=2.25.1
+python-dotenv==0.13.0
 PyYAML==5.4.1
-requests==2.25.1
+websocket-client==0.32.0
+portalocker==1.2

@@ -63,7 +63,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.restendpoint.arm64v8}",
+              "image": "${MODULES.restendpoint.amd64}",
               "createOptions": {
                 "ExposedPorts": {
                   "5678/tcp": {}

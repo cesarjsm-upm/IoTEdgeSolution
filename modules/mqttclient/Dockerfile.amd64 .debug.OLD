@@ -1,0 +1,49 @@
+#FROM mcr.microsoft.com/dotnet/runtime:7.0.3-bullseye-slim AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends unzip procps && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# FROM ubuntu:latest
+# Install curl
+RUN apt-get update && apt-get install -y curl
+
+# Create the moduleuser user    
+RUN useradd -ms /bin/bash moduleuser
+# Add moduleuser to sudoers
+RUN echo "moduleuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# Switch to moduleuser
+USER moduleuser
+# RUN curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l ~/vsdbg
+
+# Create the directory for vsdbg
+RUN mkdir -p /home/moduleuser/vsdbg
+# RUN chmod +x /home/moduleuser/vsdbg
+# Set the correct permissions
+# RUN chmod +x /home/moduleuser/vsdbg && \
+#    chown moduleuser:moduleuser /home/moduleuser/vsdbg
+
+RUN chown -R moduleuser:moduleuser /home/moduleuser/vsdbg && chmod -R 777 /home/moduleuser/vsdbg
+#RUN chown -R root:root /home/moduleuser/vsdbg && chmod -R 755 /home/moduleuser/vsdbg
+    
+# Download vsdbg
+RUN curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /home/moduleuser/vsdbg
+# RUN curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v 17.0.10712.2 -l /home/moduleuser/vsdbg
+
+# FROM mcr.microsoft.com/dotnet/sdk:7.0.103-bullseye-slim AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish -c Debug -o out
+
+FROM base
+WORKDIR /app
+COPY --from=build-env /app/out ./
+
+ENTRYPOINT ["dotnet", "mqttclient.dll"]

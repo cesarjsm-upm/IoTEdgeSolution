@@ -1,0 +1,182 @@
+﻿using Microsoft.Azure.Devices.Client;
+using Microsoft.Azure.Devices.Client.Transport.Mqtt;
+using System.Text;
+using Microsoft.Azure.Devices.Shared; // For TwinCollection
+using Newtonsoft.Json;                // For JsonConvert
+
+using MQTTnet;
+using MQTTnet.Client;
+// using MQTTnet.Client.Options;
+
+
+namespace edgemonitor;
+
+internal class ModuleBackgroundService : BackgroundService
+{
+    private int _counter;
+    private ModuleClient? _moduleClient;
+    
+    private CancellationToken _cancellationToken;
+    private readonly ILogger<ModuleBackgroundService> _logger;
+
+    public ModuleBackgroundService(ILogger<ModuleBackgroundService> logger) => _logger = logger;
+
+    // Thresholds
+    static int temperatureThreshold { get; set; } = 25;
+
+    // TelemetryInterval
+    static int telemetryInterval { get; set; } = 5;
+
+    // ************* MQTT CLIENT *************************
+    // private IMqttClient _mqttClient;
+    private IMqttClient? _mqttClient;
+    private string mqttclientAddress = "192.168.0.200";
+    private string mqttPubTopic = "edgemonitor/datanormalized";
+    private bool mqttConected = false;
+
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    {
+        _cancellationToken = cancellationToken;
+        MqttTransportSettings mqttSetting = new(TransportType.Mqtt_Tcp_Only);
+        ITransportSettings[] settings = { mqttSetting };
+
+        // Open a connection to the Edge runtime
+        _moduleClient = await ModuleClient.CreateFromEnvironmentAsync(settings);
+
+        // Reconnect is not implented because we'll let docker restart the process when the connection is lost
+        _moduleClient.SetConnectionStatusChangesHandler((status, reason) =>
+            _logger.LogWarning("Connection changed: Status: {status} Reason: {reason}", status, reason));
+
+        await _moduleClient.OpenAsync(cancellationToken);
+
+        _logger.LogInformation("EDGE MONITOR module client initialized.");
+
+        // ************************ SEND TO MQTT BROKER ******************
+        var factory = new MqttFactory();
+        var _mqttClient = factory.CreateMqttClient();
+        var mqttClientOptions = new MqttClientOptionsBuilder()
+                    .WithClientId("edgemonitor")
+                    .WithTcpServer(mqttclientAddress, 1883) // Replace with your broker's address and port
+                    .WithCleanSession()
+                    .Build();
+
+        var mqttFactory = new MqttFactory();
+        _mqttClient = mqttFactory.CreateMqttClient();
+
+        var connectResult = await _mqttClient.ConnectAsync(mqttClientOptions, _cancellationToken);
+
+        if (connectResult.ResultCode == MqttClientConnectResultCode.Success)
+        {
+            _logger.LogInformation("Connected to MQTT BROKER: {mqttclientAddress}", mqttclientAddress);
+            mqttConected = true;
+        }
+        // ************************ SEND TO MQTT BROKER ******************
+
+
+        // Read the TemperatureThreshold value from the module twin's desired properties
+        var moduleTwin = await _moduleClient.GetTwinAsync();
+        await OnDesiredPropertiesUpdate(moduleTwin.Properties.Desired, _moduleClient);
+
+        // Attach a callback for updates to the module twin's desired properties.
+        await _moduleClient.SetDesiredPropertyUpdateCallbackAsync(OnDesiredPropertiesUpdate, null);
+
+        // Register callback to be called when a message is received by the module
+        await _moduleClient.SetInputMessageHandlerAsync("inputFromMessageDispatcher", ProcessMessageAsync, null, cancellationToken);
+
+        // Register a callback for messages that are received by the module that are sent to the FilterMessages method.
+        // await _moduleClient.SetInputMessageHandlerAsync("inputFromMessageDispatcher", FilterMessages, _moduleClient);
+    }
+
+    async Task<MessageResponse> ProcessMessageAsync(Message message, object userContext)
+    {
+
+        try
+        {
+            int counterValue = Interlocked.Increment(ref _counter);
+
+            byte[] messageBytes = message.GetBytes();
+            string messageString = Encoding.UTF8.GetString(messageBytes);
+            // _logger.LogInformation("Received message: {counterValue}, Body: [{messageString}]", counterValue, messageString);
+            // _logger.LogInformation("temperatureThreshold: {temperatureThreshold}", temperatureThreshold);
+            // _logger.LogInformation("telemetryInterval: {telemetryInterval}", telemetryInterval);
+
+            if (!string.IsNullOrEmpty(messageString))
+            {
+                using Message pipeMessage = new(messageBytes);
+                foreach (KeyValuePair<string, string> prop in message.Properties)
+                {
+                    pipeMessage.Properties.Add(prop.Key, prop.Value);
+                }
+                await _moduleClient!.SendEventAsync("EdgeIoTHub", pipeMessage, _cancellationToken);
+
+                // _logger.LogInformation("Message SENT");
+                _logger.LogInformation("Message SENT: {messageString}", messageString);
+
+                // ************************ SEND TO MQTT BROKER ******************
+                if (mqttConected)
+                {
+                    Console.WriteLine("CONECTED 1"); 
+                    
+                    var messageToMQTT = new MqttApplicationMessageBuilder()
+                     .WithTopic(mqttPubTopic)
+                     .WithPayload(messageString)
+                     .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce)
+                     .WithRetainFlag(false)
+                     .Build();
+
+                     Console.WriteLine("CONECTED 2"); 
+                    // Publish the message  
+                    await _mqttClient.PublishAsync(messageToMQTT);
+
+                    Console.WriteLine("Message published.");
+
+                    // Disconnect from the broker
+                    // await _mqttClient.DisconnectAsync();
+                    // Console.WriteLine("Disconnected from the broker.");
+
+                };
+                // ************************ SEND TO MQTT BROKER ******************
+
+            }
+        }
+        catch (Exception ex)
+        {
+            // Code to handle any other type of exception
+            _logger.LogInformation("An error occurred: {ex.Message}", ex.Message);
+
+        }
+
+        return MessageResponse.Completed;
+    }
+
+    static Task OnDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
+    {
+        try
+        {
+            Console.WriteLine("Desired property change:");
+            Console.WriteLine(JsonConvert.SerializeObject(desiredProperties));
+
+            if (desiredProperties["TemperatureThreshold"] != null)
+                temperatureThreshold = desiredProperties["TemperatureThreshold"];
+
+            if (desiredProperties["TelemetryInterval"] != null)
+                telemetryInterval = desiredProperties["TelemetryInterval"];
+
+        }
+        catch (AggregateException ex)
+        {
+            foreach (Exception exception in ex.InnerExceptions)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Error when receiving desired property: {0}", exception);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Error when receiving desired property: {0}", ex.Message);
+        }
+        return Task.CompletedTask;
+    }
+}
+

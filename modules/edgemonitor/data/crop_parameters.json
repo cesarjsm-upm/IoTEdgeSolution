@@ -1,0 +1,110 @@
+ {
+    "Cereals": {
+        "Temperature": {"min": 10, "max": 25},
+        "SoilMoisture": {"min": 60, "max": 70},
+        "SoilPh": {"min": 6.0, "max": 7.5},
+        "Humidity": {"min": 40, "max": 60},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 30000, "max": 40000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Olive": {
+        "Temperature": {"min": 15, "max": 30},
+        "SoilMoisture": {"min": 50, "max": 60},
+        "SoilPh": {"min": 6.5, "max": 7.5},
+        "Humidity": {"min": 50, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Orange": {
+        "Temperature": {"min": 12, "max": 38},
+        "SoilMoisture": {"min": 50, "max": 60},
+        "SoilPh": {"min": 5.5, "max": 7.0},
+        "Humidity": {"min": 50, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Strawberries": {
+        "Temperature": {"min": 15, "max": 25},
+        "SoilMoisture": {"min": 60, "max": 80},
+        "SoilPh": {"min": 5.5, "max": 6.5},
+        "Humidity": {"min": 60, "max": 80},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 30000, "max": 40000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Peaches": {
+        "Temperature": {"min": 20, "max": 30},
+        "SoilMoisture": {"min": 60, "max": 80},
+        "SoilPh": {"min": 6.0, "max": 7.0},
+        "Humidity": {"min": 60, "max": 80},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Cherries": {
+        "Temperature": {"min": 18, "max": 30},
+        "SoilMoisture": {"min": 60, "max": 80},
+        "SoilPh": {"min": 6.0, "max": 7.5},
+        "Humidity": {"min": 50, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Broccoli": {
+        "Temperature": {"min": 18, "max": 24},
+        "SoilMoisture": {"min": 60, "max": 75},
+        "SoilPh": {"min": 6.0, "max": 7.0},
+        "Humidity": {"min": 50, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Cauliflower": {
+        "Temperature": {"min": 15, "max": 20},
+        "SoilMoisture": {"min": 60, "max": 75},
+        "SoilPh": {"min": 6.5, "max": 7.5},
+        "Humidity": {"min": 60, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Peppers": {
+        "Temperature": {"min": 20, "max": 30},
+        "SoilMoisture": {"min": 60, "max": 80},
+        "SoilPh": {"min": 6.0, "max": 7.0},
+        "Humidity": {"min": 50, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 30000, "max": 40000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Onions": {
+        "Temperature": {"min": 12, "max": 24},
+        "SoilMoisture": {"min": 60, "max": 70},
+        "SoilPh": {"min": 6.0, "max": 7.0},
+        "Humidity": {"min": 60, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 20000, "max": 30000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Tomatoes": {
+        "Temperature": {"min": 20, "max": 30},
+        "SoilMoisture": {"min": 60, "max": 80},
+        "SoilPh": {"min": 6.0, "max": 6.8},
+        "Humidity": {"min": 60, "max": 80},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 30000, "max": 40000},
+        "Co2": {"min": 300, "max": 400}
+    },
+    "Cucumbers": {
+        "Temperature": {"min": 18, "max": 30},
+        "SoilMoisture": {"min": 70, "max": 80},
+        "SoilPh": {"min": 5.5, "max": 6.8},
+        "Humidity": {"min": 60, "max": 70},
+        "Light": {"min": 30, "max": 70},
+        "SolarRadiation": {"min": 30000, "max": 40000},
+        "Co2": {"min": 300, "max": 400}
+    }
+}

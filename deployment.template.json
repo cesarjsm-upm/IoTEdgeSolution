@@ -1,0 +1,135 @@
+{
+  "$schema-template": "4.0.0",
+  "modulesContent": {
+    "$edgeAgent": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "runtime": {
+          "type": "docker",
+          "settings": {
+            "minDockerVersion": "v1.25",
+            "loggingOptions": "",
+            "registryCredentials": {
+              "myacr": {
+                "username": "${CONTAINER_REGISTRY_USERNAME}",
+                "password": "${CONTAINER_REGISTRY_PASSWORD}",
+                "address": "${CONTAINER_REGISTRY_SERVER}"
+              }
+            }
+          }
+        },
+        "systemModules": {
+          "edgeAgent": {
+            "type": "docker",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-agent:1.4",
+              "createOptions": {}
+            }
+          },
+          "edgeHub": {
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-hub:1.4",
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "5671/tcp": [
+                      {
+                        "HostPort": "5671"
+                      }
+                    ],
+                    "8883/tcp": [
+                      {
+                        "HostPort": "8883"
+                      }
+                    ],
+                    "443/tcp": [
+                      {
+                        "HostPort": "443"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "modules": {
+          "edgemonitor": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.edgemonitor.arm64v8}",
+              "createOptions": {}
+            }
+          },
+          "messagedispatcher": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.messagedispatcher.arm64v8}",
+              "createOptions": {}
+            }
+          },
+          "mqttclient": {
+            "version": "1.4",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.mqttclient.arm64v8}",
+              "createOptions": {}
+            }
+          },
+          "restendpoint": {
+            "version": "1.4",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.restendpoint.arm64v8}",
+              "createOptions": {
+                "ExposedPorts": {
+                  "5678/tcp": {}
+                },
+                "HostConfig": {
+                  "PortBindings": {
+                    "5678/tcp": [
+                      {
+                        "HostPort": "5678"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "$edgeHub": {
+      "properties.desired": {
+        "schemaVersion": "1.2",
+        "routes": {
+          "mqttclientTomessagedispatcher": "FROM /messages/modules/mqttclient/outputs/mqttclientOutput INTO BrokeredEndpoint(\"/modules/messagedispatcher/inputs/inputFromMQTT\")",
+          "messagedispatcherToIoTHub": "FROM /messages/modules/messagedispatcher/outputs/messagedispatcherOutput INTO BrokeredEndpoint(\"/modules/edgemonitor/inputs/inputFromMessageDispatcher\")",
+          "edgemonitorToIoTHub": "FROM /messages/modules/edgemonitor/outputs/* INTO $upstream"
+        },
+        "storeAndForwardConfiguration": {
+          "timeToLiveSecs": 7200
+        }
+      }
+    },
+    "edgemonitor": {
+      "properties.desired": {
+        "TelemetryInterval" : 10
+      }
+    }
+  }
+}

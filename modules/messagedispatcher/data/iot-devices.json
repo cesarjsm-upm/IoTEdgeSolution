@@ -1,0 +1,62 @@
+[
+    {
+        "IdNode": "15640",
+        "Device": "B-L072Z-LRWAN1",
+        "Brand": "STM32",
+        "Gateway": "ChirpStack",
+        "GatewayID": "b827ebfffecfb71d",
+        "IsGateway": false,
+        "Protocol": "LoRa",
+        "Datasource": "ChirpStack",
+        "Sendtomonitor": true,
+        "Crop":"Tomatoes"
+    },
+    {
+        "IdNode": "20567",
+        "Device": "Waspmote PRO v1.5",
+        "Brand": "libelium",
+        "Gateway": "libelium",
+        "GatewayID": "0013A200416CCA12",
+        "IsGateway": true,
+        "Protocol": "IEEE 802.15.4",
+        "Datasource": "libelium",
+        "Sendtomonitor": true,
+        "Crop":"Olive"
+    },
+    {
+        "IdNode": "22678",
+        "Device": "Waspmote PRO v1.5",
+        "Brand": "libelium",
+        "Gateway": "libelium",
+        "GatewayID": "0013A200416CCA12",
+        "IsGateway": false,
+        "Protocol": "IEEE 802.15.4",
+        "Datasource": "libelium",
+        "Sendtomonitor": true,
+        "Crop":"Orange"
+    },
+    {
+        "IdNode": "191168",
+        "Device": "Node-RED",
+        "Brand": "n/a",
+        "Gateway": "n/a",
+        "GatewayID": "",
+        "IsGateway": false,
+        "Protocol": "MQTT",
+        "Datasource": "Node-RED",
+        "Sendtomonitor": true,
+        "Crop":"Cereals"
+    },
+    {
+        "IdNode": "681911",
+        "Device": "TEST",
+        "Brand": "n/a",
+        "Gateway": "n/a",
+        "GatewayID": "",
+        "IsGateway": false,
+        "Protocol": "MQTT",
+        "Datasource": "csv",
+        "Sendtomonitor": true,
+        "Crop":"Cereals"
+    }
+]

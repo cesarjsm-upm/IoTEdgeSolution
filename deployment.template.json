@@ -57,36 +57,6 @@
           }
         },
         "modules": {
-          "edgemonitor": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.edgemonitor.arm64v8}",
-              "createOptions": {}
-            }
-          },
-          "messagedispatcher": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.messagedispatcher.arm64v8}",
-              "createOptions": {}
-            }
-          },
-          "mqttclient": {
-            "version": "1.4",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.mqttclient.arm64v8}",
-              "createOptions": {}
-            }
-          },
           "restendpoint": {
             "version": "1.4",
             "type": "docker",

@@ -2,7 +2,7 @@
     "$schema-version": "0.0.1",
     "description": "Message dispacther from MQTT data",
     "image": {
-        "repository": "${CONTAINER_REGISTRY_SERVER}/messagedispatcher",
+        "repository": "${ACR_ADDRESS}/messagedispatcher",
         "tag": {
             "version": "0.0.1",
             "platforms": {

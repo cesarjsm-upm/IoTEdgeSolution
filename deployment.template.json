@@ -10,10 +10,10 @@
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
             "registryCredentials": {
-              "myacr": {
-                "username": "${CONTAINER_REGISTRY_USERNAME}",
-                "password": "${CONTAINER_REGISTRY_PASSWORD}",
-                "address": "${CONTAINER_REGISTRY_SERVER}"
+              "acr": {
+                "username": "${ACR_USER}",
+                "password": "${ACR_PASSWORD}",
+                "address": "${ACR_ADDRESS}"
               }
             }
           }

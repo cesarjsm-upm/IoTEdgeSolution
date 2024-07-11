@@ -2,7 +2,7 @@
     "$schema-version": "0.0.1",
     "description": "Edge Monitor and Control",
     "image": {
-        "repository": "${CONTAINER_REGISTRY_SERVER}/edgemonitor",
+        "repository": "${ACR_ADDRESS}/edgemonitor",
         "tag": {
             "version": "0.0.1",
             "platforms": {

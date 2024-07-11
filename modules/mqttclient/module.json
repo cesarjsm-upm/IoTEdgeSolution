@@ -2,7 +2,7 @@
     "$schema-version": "0.0.1",
     "description": "Read data from MQTT Broker",
     "image": {
-        "repository": "${CONTAINER_REGISTRY_SERVER}/mqttclient",
+        "repository": "${ACR_ADDRESS}/mqttclient",
         "tag": {
             "version": "0.0.1",
             "platforms": {

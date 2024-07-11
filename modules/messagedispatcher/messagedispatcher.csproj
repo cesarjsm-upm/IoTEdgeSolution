@@ -5,7 +5,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
-
 	<ItemGroup>
         <ProjectCapability Include="AzureIoTEdgeModule"/>
     </ItemGroup> 

@@ -63,7 +63,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.edgemonitor.amd64}",
+              "image": "${MODULES.edgemonitor.amd64.debug}",
               "createOptions": {}
             }
           },
@@ -73,7 +73,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.messagedispatcher.amd64}",
+              "image": "${MODULES.messagedispatcher.amd64.debug}",
               "createOptions": {}
             }
           },
@@ -83,7 +83,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.mqttclient.amd64}",
+              "image": "${MODULES.mqttclient.amd64.debug}",
               "createOptions": {}
             }
           },
@@ -93,7 +93,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.restendpoint.amd64}",
+              "image": "${MODULES.restendpoint.amd64.debug}",
               "createOptions": {
                 "ExposedPorts": {
                   "5678/tcp": {}

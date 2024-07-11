@@ -1,6 +1,4 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0.103-bullseye-slim-arm64v8 AS build-env
-#FROM mcr.microsoft.com/dotnet/aspnet:6.0.31-focal-arm64v8 AS build-env
-
 
 WORKDIR /app
 

@@ -57,13 +57,13 @@
           }
         },
         "modules": {
-          "messagedispatcher": {
-            "version": "1.0",
+          "mqttclient": {
+            "version": "1.4",
             "type": "docker",
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.messagedispatcher.arm64v8}",
+              "image": "${MODULES.mqttclient.arm64v8}",
               "createOptions": {}
             }
           },

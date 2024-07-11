@@ -11,9 +11,9 @@
             "loggingOptions": "",
             "registryCredentials": {
               "acr": {
-                "username": "$ACR_USER",
-                "password": "$ACR_PASSWORD",
-                "address": "$ACR_ADDRESS"
+                "username": "${ACR_USER}",
+                "password": "${ACR_PASSWORD}",
+                "address": "${ACR_ADDRESS}"
               }
             }
           }

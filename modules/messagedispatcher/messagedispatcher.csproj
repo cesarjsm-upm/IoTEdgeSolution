@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
+		<RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
+
 
 	<ItemGroup>
         <ProjectCapability Include="AzureIoTEdgeModule"/>

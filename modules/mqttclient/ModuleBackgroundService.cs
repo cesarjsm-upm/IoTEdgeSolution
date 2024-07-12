@@ -98,7 +98,7 @@ internal class ModuleBackgroundService : BackgroundService
             _moduleClient!.SendEventAsync("mqttclientOutput", pipeMessage, _cancellationToken).Wait();
             // _moduleClient!.SendEventAsync("output1", pipeMessage, _cancellationToken).Wait();
 
-            _logger.LogInformation("Message SENT");
+            _logger.LogInformation("Message SENT: {strMqttMessage}", strMqttMessage);
         }
 
         return Task.CompletedTask;

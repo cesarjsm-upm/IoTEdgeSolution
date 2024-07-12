@@ -129,7 +129,6 @@ internal class ModuleBackgroundService : BackgroundService
                         }
                         await _moduleClient!.SendEventAsync("messagedispatcherOutput", pipeMessage, _cancellationToken);
 
-                        // _logger.LogInformation("Message SENT");
                         _logger.LogInformation("Message SENT: {messageToSend}", messageToSend);
                     }
                 }

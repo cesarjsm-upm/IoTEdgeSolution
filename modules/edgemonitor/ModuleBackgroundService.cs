@@ -100,7 +100,7 @@ internal class ModuleBackgroundService : BackgroundService
 
             byte[] messageBytes = message.GetBytes();
             string messageString = Encoding.UTF8.GetString(messageBytes);
-            // _logger.LogInformation("Received message: {counterValue}, Body: [{messageString}]", counterValue, messageString);
+            _logger.LogInformation("Received message: {counterValue}, Body: [{messageString}]", counterValue, messageString);
 
 
             if (!string.IsNullOrEmpty(messageString))
@@ -113,7 +113,7 @@ internal class ModuleBackgroundService : BackgroundService
                 }
                 await _moduleClient!.SendEventAsync("EdgeIoTHub", pipeMessage, _cancellationToken);
 
-                _logger.LogInformation("Message SENT: {messageString}", messageString);
+                _logger.LogInformation("Message SENT to IoT Hub: {messageString}", messageString);
 
                 // ************************ SEND TO MQTT BROKER ******************
                 if (mqttConected && _mqttClient != null)
@@ -127,6 +127,7 @@ internal class ModuleBackgroundService : BackgroundService
 
                     // Publish the message  
                     await _mqttClient.PublishAsync(messageToMQTT);
+                    _logger.LogInformation("Message SENT to MQTT BROKER: Topic: {mqttPubTopic} Payload: {messageString}", mqttPubTopic, messageString);
                 };
                 // ************************ SEND TO MQTT BROKER ******************
 

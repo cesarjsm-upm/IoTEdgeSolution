@@ -23,6 +23,7 @@ internal class ModuleBackgroundService : BackgroundService
     // private IMqttClient _mqttClient;
     private static IMqttClient? _mqttClient = null;
     private string mqttclientAddress = "192.168.0.200";
+    private int mqttclientPort = 1883;
     //private string mqttclientAddress = "ubuntu-rpi4";
     // private string mqttSubTopic = "#";
     private string mqttSubTopic = "+/telemetry";
@@ -48,26 +49,24 @@ internal class ModuleBackgroundService : BackgroundService
         // Setup MQTT client options
         var mqttClientOptions = new MqttClientOptionsBuilder()
             .WithClientId("mqttclient")
-            .WithTcpServer(mqttclientAddress, 1883) // Replace with your broker address and port
+            .WithTcpServer(mqttclientAddress, mqttclientPort) 
             .WithCleanSession()
             .Build();
 
         var mqttFactory = new MqttFactory();
         _mqttClient = mqttFactory.CreateMqttClient();
-
         var connectResult = await _mqttClient.ConnectAsync(mqttClientOptions, cancellationToken);
 
         if (connectResult.ResultCode == MqttClientConnectResultCode.Success)
         {
-            _logger.LogInformation("Connected to MQTT BROKER: {mqttclientAddress} Topic {mqttSubTopic}", mqttclientAddress, mqttSubTopic);
+            _logger.LogInformation("Connected to MQTT BROKER: {mqttclientAddress} Topic {mqttSubTopic}",
+                                    mqttclientAddress, mqttSubTopic);
             // Subscribe to a topic
             await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(mqttSubTopic).Build());
         };
 
         _mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
-
-        // Register callback to be called when a message is received by the module
-        // await _moduleClient.SetInputMessageHandlerAsync("input1", ProcessMessageAsync, null, cancellationToken);
+        
     }
 
     private Task MqttClient_ApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs args)
@@ -81,23 +80,16 @@ internal class ModuleBackgroundService : BackgroundService
 
         // Get the Europe/Madrid time zone
         TimeZoneInfo madridTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-        // Get current time UTC
-        DateTime utcNow = DateTime.UtcNow;
-        // Convert current time UTC to Europe/Madrid time
-        DateTime madridTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, madridTimeZone);
+        DateTime utcNow = DateTime.UtcNow;  // Get current time UTC
+        DateTime madridTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, madridTimeZone); // Convert current time UTC to Europe/Madrid time
 
         var mqttMessage = new MqttMessage(topic, payload, contentType, madridTime);
-
         var strMqttMessage = mqttMessage.ToString();
-
         var messageBytes = Encoding.UTF8.GetBytes(strMqttMessage);
 
         using (var pipeMessage = new Message(messageBytes))
         {
-            // ioTHubModuleClient.SendEventAsync("output1", pipeMessage).Wait();
             _moduleClient!.SendEventAsync("mqttclientOutput", pipeMessage, _cancellationToken).Wait();
-            // _moduleClient!.SendEventAsync("output1", pipeMessage, _cancellationToken).Wait();
-
             _logger.LogInformation("Message SENT: {strMqttMessage}", strMqttMessage);
         }
 

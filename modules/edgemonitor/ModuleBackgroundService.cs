@@ -102,7 +102,6 @@ internal class ModuleBackgroundService : BackgroundService
             string messageString = Encoding.UTF8.GetString(messageBytes);
             _logger.LogInformation("Received message: {counterValue}, Body: [{messageString}]", counterValue, messageString);
 
-
             if (!string.IsNullOrEmpty(messageString))
             {
                 // ************************ SEND TELEMETRY TO IOT HUB ************  
@@ -127,9 +126,9 @@ internal class ModuleBackgroundService : BackgroundService
 
                     // Publish the message  
                     await _mqttClient.PublishAsync(messageToMQTT);
-                    _logger.LogInformation("Message SENT to MQTT BROKER: Topic: {mqttPubTopic} Payload: {messageString}", mqttPubTopic, messageString);
+                    _logger.LogInformation("Message SENT to MQTT BROKER: Topic: {mqttPubTopic} Payload: {messageString}", 
+                                                                                           mqttPubTopic, messageString);
                 };
-                // ************************ SEND TO MQTT BROKER ******************
 
                 //********* VERIFY IF MEASUREMENTS IS OUT OF THRESHOLDS **********
                 TelemetryData telemetryData = JsonProcessor.DeserializeJsonToObject(messageString);

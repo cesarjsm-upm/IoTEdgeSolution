@@ -85,10 +85,9 @@ import paho.mqtt.client as mqtt_client
 app = Flask(__name__)
 
 MQTT_BROKER = '192.168.0.200'
-#MQTT_BROKER = 'ubuntu-rpi4'
 MQTT_PORT = 1883
-MQTT_USER = 'mqtt_user'
-MQTT_PASSWORD = 'mqtt_password'
+#MQTT_USER = 'mqtt_user'
+#MQTT_PASSWORD = 'mqtt_password'
 MQTT_CONNECTED = False
 
 # Function to connect to MQTT broker
@@ -148,26 +147,18 @@ def receive_data():
     content_type = request.content_type
 
     if content_type == 'application/json':
-        #print("content_type = application/json")
         data = request.json
         data_str = json.dumps(data)
     elif content_type == 'application/octet-stream':
-        #print("content_type = application/octet-stream")
         data_str = data.hex()
     else:
-        #print("decode utf-8")
         data_str = data.decode('utf-8')
         
     result = mqtt_client.publish('restendpoint/telemetry', data_str)
-    
-    # print("MQTT publish result", result)
-    
     #if result.rc == mqtt_client.MQTT_ERR_SUCCESS:
     if result.rc == 0:
-        #print("Data received and sent to MQTT broker.")
         return jsonify({"message": "Data received and sent to MQTT broker."})
     else:
-        #print("Failed to send data to MQTT broker.")
         return jsonify({"message": "Failed to send data to MQTT broker."}), 500
 
 ###################################################

@@ -57,6 +57,26 @@
           }
         },
         "modules": {
+          "edgemonitor": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.edgemonitor.amd64.debug}",
+              "createOptions": {}
+            }
+          },
+          "messagedispatcher": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.messagedispatcher.amd64.debug}",
+              "createOptions": {}
+            }
+          },
           "mqttclient": {
             "version": "1.4",
             "type": "docker",

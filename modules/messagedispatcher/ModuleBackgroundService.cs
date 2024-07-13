@@ -52,7 +52,6 @@ internal class ModuleBackgroundService : BackgroundService
             //  IdNode Extractor
             var extractor = new IdNodeExtractor();
             var myIdNode = extractor.ExtractIdNode(parser.MyPayload);
-            // _logger.LogInformation("ID Node: {myIdNode}", myIdNode);
 
             // Check IdNode in "iot-devices.json" list
             string filePath = "/app/data/iot-devices.json"; // Ruta del archivo JSON
@@ -67,7 +66,8 @@ internal class ModuleBackgroundService : BackgroundService
             // Show found device values
             if (device != null)
             {
-                _logger.LogInformation("Found IdNode: {device.IdNode}  Device: {device.Device} Datasource: {device.Datasource}", device.IdNode, device.Device, device.Datasource);
+                _logger.LogInformation("Found IdNode: {device.IdNode}  Device: {device.Device} Datasource: {device.Datasource}",
+                                       device.IdNode, device.Device, device.Datasource);
                 deviceIsFound = true;
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 whatDataSource = device.Datasource;
@@ -90,22 +90,26 @@ internal class ModuleBackgroundService : BackgroundService
                 switch (whatDataSource)
                 {
                     case "ChirpStack":  // ChirpStack LoRa Gateway
-                        ChirpStackData chirpData = new ChirpStackData(parser.MyTimestamp, cropType, parser.MyTopic, parser.MyPayload);
+                        ChirpStackData chirpData = new ChirpStackData(parser.MyTimestamp, cropType,
+                                                                      parser.MyTopic, parser.MyPayload);
                         normalizedData = chirpData.ToNormalizedData();
                         messageToSend = normalizedData.ToJson();
                         break;
                     case "libelium": // Libelium Gateway
-                        LibeliumData libeliumData = new LibeliumData(parser.MyTimestamp, cropType, parser.MyTopic, parser.MyPayload);
+                        LibeliumData libeliumData = new LibeliumData(parser.MyTimestamp, cropType, 
+                                                                     parser.MyTopic, parser.MyPayload);
                         normalizedData = libeliumData.ToNormalizedData();
                         messageToSend = normalizedData.ToJson();
                         break;
                     case "Node-RED": // NodeRED Simulator  
-                        NodeREDData nodeRedData = new NodeREDData(parser.MyTimestamp, cropType, parser.MyTopic, parser.MyPayload);
+                        NodeREDData nodeRedData = new NodeREDData(parser.MyTimestamp, cropType, 
+                                                                  parser.MyTopic, parser.MyPayload);
                         normalizedData = nodeRedData.ToNormalizedData();
                         messageToSend = normalizedData.ToJson();
                         break;
                     case "csv": // Simple payload with values ​​separated by comma - TEST
-                        CsvData csvData = new CsvData(parser.MyTimestamp, cropType, parser.MyTopic, parser.MyPayload);
+                        CsvData csvData = new CsvData(parser.MyTimestamp, cropType, 
+                                                      parser.MyTopic, parser.MyPayload);
                         normalizedData = csvData.ToNormalizedData();
                         messageToSend = normalizedData.ToJson();
                         break;

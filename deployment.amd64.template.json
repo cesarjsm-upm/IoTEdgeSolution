@@ -11,9 +11,9 @@
             "loggingOptions": "",
             "registryCredentials": {
               "acr": {
-                "username": "${ACR_USER}",
-                "password": "${ACR_PASSWORD}",
-                "address": "${ACR_ADDRESS}"
+                "username": "edgedeviceacr",
+                "password": "0pFrK5/n2t1v21o0HPGsIW5l0O9bbhDfN0WZQe9qMz+ACRCkcr8T",
+                "address": "edgedeviceacr.azurecr.io"
               }
             }
           }
